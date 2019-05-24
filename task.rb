@@ -139,7 +139,9 @@ module TaskManager
     #To format a list of tasks
     def formating
         @list.each do |task|
-          puts task.getPriority
+          print task.getId, " ", task.getItem.ljust(30),
+          task.getPriority.rjust(2),
+          task.getDue.rjust(10), "\n"
         end
     end
   end #End Window class
