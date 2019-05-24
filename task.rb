@@ -1,5 +1,7 @@
 ## TaskManager Module written by: Michael Remley
 ## For use in the CST223 Final Project
+require 'forwardable.rb'
+
 module TaskManager
   '''***************************************
   Class:    Task
@@ -22,9 +24,23 @@ module TaskManager
       print "Task: ", @item
     end
 
+    ##Getters##########
     def getItem
       @item
     end
+
+    def getId
+      @id
+    end
+
+    def getPriority
+      @priority
+    end
+
+    def getDue
+      @due
+    end
+    ####################
   end #End TaskInterface
 
   '''***************************************
@@ -56,6 +72,10 @@ module TaskManager
             "Task".
   ***************************************'''
   class List
+    #include & Extend
+    include Enumerable
+    extend Forwardable
+
     #List 'constructor'
     def initialize
       @tasks = Array.new
@@ -81,7 +101,7 @@ module TaskManager
       @tasks.pop
     end
 
-    #overload of the [] operator
+    #extend of the [] operator
     def [](key)
       if key.kind_of?(Integer) #looks for superclass Integer
         result = @tasks[key]
@@ -90,6 +110,9 @@ module TaskManager
       end
       return result
     end
+
+    #extend the each function
+    def_delegators :@tasks, :each, :<<
 
     #remove a task with a supplied index
     def deleteAt(index)
@@ -112,5 +135,12 @@ module TaskManager
         raise "not a list"
       end
     end #End Init
+
+    #To format a list of tasks
+    def formating
+        @list.each do |task|
+          puts task.getPriority
+        end
+    end
   end #End Window class
 end #End Module

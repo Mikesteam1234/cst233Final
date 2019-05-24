@@ -8,3 +8,4 @@ puts aList["Ruby Interface"].to_s
 #or
 puts aList[0].to_s
 aWindow = Window.new(aList)
+aWindow.formating
