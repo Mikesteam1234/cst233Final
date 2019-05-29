@@ -87,8 +87,6 @@ module TaskManager
       taskPriority = gets.chomp
       taskPriority.to_i
 
-      #taskPriority.kind_of?(Integer)
-
       puts "Enter the due date: "
       taskDueDate = gets.chomp
 
