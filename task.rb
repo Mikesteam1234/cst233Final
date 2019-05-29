@@ -25,19 +25,19 @@ module TaskManager
     end
 
     ##Getters##########
-    def getItem
+    def getName
       @name
     end
 
-    def getId
+    def getPriority
       @priority
     end
 
-    def getPriority
+    def getDue
       @dueDate
     end
 
-    def getDue
+    def getDescription
       @description
     end
     ####################
@@ -56,7 +56,7 @@ module TaskManager
   class Feature < Task
     #class 'constructor'
     def initialize(id, item, priority, due)
-      super(id, item, priority, due)
+      super(name, priority, dueDate, due)
     end
 
     def to_s
@@ -68,7 +68,7 @@ module TaskManager
   Class:    Controller
 
   Purpose:  Controls the program features such
-as the menu, displaying, storing data, etc.
+  as the menu, displaying, storing data, etc.
 
   # TODO:
   ***************************************'''
