@@ -81,8 +81,25 @@ module TaskManager
 
     def addTask()
       puts "Enter the task name: "
+      taskName = gets.chomp
+
+      puts "Enter the priority level (1-10): "
+      taskPriority = gets.chomp
+      taskPriority.to_i
+
+      #taskPriority.kind_of?(Integer)
+
+      puts "Enter the due date: "
+      taskDueDate = gets.chomp
+
+      puts "Enter the description: "
+      taskDesc = gets.chomp
+
+      newTask = Task.new(taskName, taskPriority, taskDueDate, taskDesc)
+      @taskList.push(newTask)
     end
 
-    @taskList = Array.new
-    @taskCount = 0
-  end #End Feature < TaskInterface
+    @taskList
+    @taskCount
+  end
+  end
