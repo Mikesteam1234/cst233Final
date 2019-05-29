@@ -11,34 +11,34 @@ module TaskManager
   ***************************************'''
   class Task
     #task constructor
-    def initialize(id, item, priority, due)
-      @id = id
-      @item = item
+    def initialize(name, priority, dueDate, description)
+      @name = name
       @priority = priority
-      @due = due
+      @dueDate = dueDate
+      @description = description
     end
 
     #Extend the to_s for
     #printing with a given task
     def to_s
-      print "Task: ", @item
+
     end
 
     ##Getters##########
     def getItem
-      @item
+      @name
     end
 
     def getId
-      @id
-    end
-
-    def getPriority
       @priority
     end
 
+    def getPriority
+      @dueDate
+    end
+
     def getDue
-      @due
+      @description
     end
     ####################
   end #End TaskInterface
@@ -62,6 +62,63 @@ module TaskManager
     def to_s
       print "Feature: ", @item
     end
+  end #End Feature < TaskInterface
+
+  '''***************************************
+  Class:    Controller
+
+  Purpose:  Controls the program features such
+as the menu, displaying, storing data, etc.
+
+  # TODO:
+  ***************************************'''
+  class Controller
+    #class 'constructor'
+    def initialize()
+    end
+
+    #start the program
+    def fileMenu()
+
+    end
+
+    def mainMenu()
+      num = 1
+
+      while (num != "4\n")
+        puts "Select one of the following:\n 1. Add Task\n 2. Remove Task\n 3. Display Tasks\n 4. Exit Program"
+        num = gets
+
+        if (num == "1\n")
+          addTask()
+        end
+
+      end
+
+    end
+
+    def addTask()
+      puts "Enter the task name: "
+
+      taskName = gets.strip
+      taskName = gets.chomp
+      puts "Enter the priority: "
+      taskPriority = gets.strip
+      taskPriority = gets.chomp
+      puts "Enter the due date: "
+      taskDueDate = gets.strip
+      taskDueDate = gets.chomp
+      puts "Enter the description: "
+      taskDescription = gets.strip
+      taskDescription = gets.chomp
+
+      newTask = Task.new(taskName, taskPriority, taskDueDate, taskDescription)
+      @taskList[@taskCount] = newTask
+      @taskCount = @taskCount + 1
+    end
+
+    @taskList = Array.new
+    @taskCount = 0
   end #End Feature < TaskInterface
 
   '''***************************************
