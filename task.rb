@@ -1,5 +1,6 @@
-## TaskManager Module written by: Michael Remley, but mostly Levi Leuthold cuz he's good.
+## TaskManager Module written by: Michael Remley, Levi Leuthold, Dillon Wall
 ## For use in the CST223 Final Project
+
 module TaskManager
   '***************************************
   Class:    Task
@@ -40,6 +41,10 @@ module TaskManager
     def getDescription
       @description
     end
+
+    def getId
+      @id
+    end
     ####################
   end #End TaskInterface
 
@@ -69,14 +74,19 @@ module TaskManager
       while (num != "4\n")
         puts "Select one of the following:\n",
              "1. Add Task\n",
-             "2. Remove Task\n",
-             "3. Display Tasks\n",
+             "2. Complete/Remove Task\n",
+             "3. Display All Tasks\n",
              "4. Exit Program"
 
         num = gets
 
         if (num == "1\n")
           addTask()
+        elsif (num == "2\n")
+          puts "Enter the ID of the task you wish to delete: "
+          taskID = gets.chomp
+          taskID.to_i
+          removeTask(taskID)
         elsif (num == "3\n")
           displayTasks()
         end
@@ -105,16 +115,36 @@ module TaskManager
     end
 
     'This method needs some serious formatting'
+
     def displayTasks()
-      puts "Tasks:\n"
-      puts "----------Name------------Priority-----------Due Date-------------Description--------------------"
+      puts "\nTasks:\n"
+      puts "Name----------Priority----------Due Date----------Description----------"
 
       for task in @taskList do
-        puts "#{task.getName}           #{task.getPriority}              #{task.getDue}                 #{task.getDescription}"
+        puts "#{task.getName}          #{task.getPriority}          #{task.getDue}           #{task.getDescription}"
+        puts ""
+      end
+
+    end
+
+    def removeTask(taskId)
+      index = 0
+      found = false
+      for task in @taskList do
+
+        if task.getId().to_s == taskId.to_s   #For some reason comparing integers doesn't work here, it only worked when I converted both to strings
+          @taskList.delete_at(index)
+          found = true
+          break
+        end
+        index = index + 1
+      end
+
+      if (found == false)
+        puts "Error: Couldn't find that task to delete."
       end
 
     end
 
   end
-
 end
