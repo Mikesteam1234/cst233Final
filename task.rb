@@ -142,6 +142,8 @@ module TaskManager
 
       if (found == false)
         puts "Error: Couldn't find that task to delete."
+      else
+        @taskCount = @taskCount - 1
       end
 
     end
