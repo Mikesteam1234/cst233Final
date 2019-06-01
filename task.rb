@@ -67,6 +67,7 @@ module TaskManager
     #class constructor
     def initialize
       @taskList = Array.new
+      @completedList = Array.new
       @taskCount = 0
     end
 
@@ -78,12 +79,13 @@ module TaskManager
     def mainMenu
       num = 1
 
-      while (num != "4\n")
+      while (num != "5\n")
         puts "Select one of the following:\n",
              "1. Add Task\n",
              "2. Complete/Remove Task\n",
              "3. Display All Tasks\n",
-             "4. Exit Program"
+             "4. Display Completed Tasks\n",
+             "5. Exit Program"
 
         num = gets
 
@@ -95,7 +97,9 @@ module TaskManager
           taskID.to_i
           removeTask(taskID)
         elsif (num == "3\n")
-          displayTasks()
+          displayTasks(@taskList)
+        elsif (num == "4\n")
+          displayTasks(@completedList)
         end
 
       end
@@ -130,14 +134,14 @@ module TaskManager
 
     # TODO: Finish formatting
     ****************************************'
-    def displayTasks()
+    def displayTasks(taskArray)
 
       #Clear previous screen
       system "clear" or system "cls"
 
       #display 'error message' and clear
       #screen on empty tasklist
-      if @taskList.length() <= 0
+      if taskArray.length() <= 0
         puts "No tasks to retrieve...\n\n"
         return
       end
@@ -155,7 +159,7 @@ module TaskManager
       #for each task in the tasklist -
       #display a formated string readible by
       #the user.
-      @taskList.each do |atask|
+      taskArray.each do |atask|
         print "\n", atask.getId().to_s.ljust(4),
               atask.getName().ljust(10), " | ",
               atask.getDescription().ljust(40),
@@ -174,6 +178,7 @@ module TaskManager
       for task in @taskList do
 
         if task.getId().to_s == taskId.to_s   #For some reason comparing integers doesn't work here, it only worked when I converted both to strings
+          @completedList.push(@taskList.last)
           @taskList.delete_at(index)
           found = true
           break
