@@ -2,6 +2,13 @@
 ## For use in the CST223 Final Project
 
 module TaskManager
+
+  '***************************************
+             Program constants
+  ***************************************'
+  #Formatting
+  TOTAL_LENGTH_OF_WINDOW = 76
+
   '***************************************
   Class:    Task
 
@@ -57,7 +64,7 @@ module TaskManager
   # TODO:
   ****************************************'
   class Controller
-    #class 'constructor'
+    #class constructor
     def initialize
       @taskList = Array.new
       @taskCount = 0
@@ -114,18 +121,52 @@ module TaskManager
       @taskCount = @taskCount + 1
     end
 
-    'This method needs some serious formatting'
+    '***************************************
+    Class: displayTasks
 
+    Purpose: A system independant function
+             used to display a formated
+             list of all incomplete tasks
+
+    # TODO: Finish formatting
+    ****************************************'
     def displayTasks()
-      puts "\nTasks:\n"
-      puts "Name----------Priority----------Due Date----------Description----------"
 
-      for task in @taskList do
-        puts "#{task.getName}          #{task.getPriority}          #{task.getDue}           #{task.getDescription}"
-        puts ""
+      #Clear previous screen
+      system "clear" or system "cls"
+
+      #display 'error message' and clear
+      #screen on empty tasklist
+      if @taskList.length() <= 0
+        puts "No tasks to retrieve...\n\n"
+        return
       end
 
-    end
+      #Display task list header
+      print "Id".ljust(4), "Name".ljust(13),
+            "Description".ljust(40), "Priority".rjust(8),
+            "Due Date".rjust(11), "\n"
+
+      #Fancy formatting
+      1.upto TOTAL_LENGTH_OF_WINDOW do
+        print "-"
+      end
+
+      #for each task in the tasklist -
+      #display a formated string readible by
+      #the user.
+      @taskList.each do |atask|
+        print "\n", atask.getId().to_s.ljust(4),
+              atask.getName().ljust(10), " | ",
+              atask.getDescription().ljust(40),
+              atask.getPriority().to_s.rjust(8),
+              atask.getDue().rjust(11)
+      end #End for each task
+
+      #place holder
+      puts
+
+    end #End displayTasks
 
     def removeTask(taskId)
       index = 0
