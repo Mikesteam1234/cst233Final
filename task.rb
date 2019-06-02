@@ -188,6 +188,9 @@ module TaskManager
     def mainMenu
       num = 1
 
+      #Clear previous screen
+      system "clear" or system "cls"
+
       while (num != "7\n")
         puts "Select one of the following:\n",
              "----------ACTIONS-----------",
@@ -285,8 +288,15 @@ module TaskManager
               atask.getDue().rjust(11)
       end #End for each task
 
-      #place holder
+      #Fancy formatting
       puts
+
+      1.upto TOTAL_LENGTH_OF_WINDOW do
+        print "-"
+      end
+
+      print "\nPress enter to continue... "
+      gets
 
     end #End displayTasks
 
