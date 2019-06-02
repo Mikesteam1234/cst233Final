@@ -35,7 +35,8 @@ module TaskManager
     #Extend the to_s for
     #printing with a given task
     def toString
-      #Not sure if we want this or just use the getters for more selective formatting
+      #Not sure if we want this or just use the getters for more
+      #selective formatting
     end
 
     ##Getters##########
@@ -111,7 +112,7 @@ module TaskManager
               task['description'], task['id']) }
         else
           #raise what?
-          raise
+          raise "something"
         end #end if
 
       rescue
@@ -242,7 +243,9 @@ module TaskManager
       puts "Enter the description: "
       taskDesc = gets.chomp
 
-      newTask = Task.new(taskName, taskPriority, taskDueDate, taskDesc, @taskCount)
+      newTask = Task.new(taskName, taskPriority, taskDueDate,
+        taskDesc, @taskCount)
+
       @taskList.push(newTask)
       @taskCount = @taskCount + 1
     end
