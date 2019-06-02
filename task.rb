@@ -88,7 +88,7 @@ module TaskManager
     #****************************************
     def openFile()
       #Prompt user for file
-      puts "Enter the file name to open from (Press 'Enter' for default): "
+      print "Enter the file name to open from (Press 'Enter' for default): "
       answer = gets.chomp
 
       #fix filename
@@ -122,18 +122,18 @@ module TaskManager
     end #end open file
 
     #***************************************
-    #Class: displayTasks
+    # Method: displayTasks
     #
-    #Purpose: Prompts the user for a file name
-    #         or uses the default "todo.json"
-    #         and parses both lists and saves them
-    #         to the JSON file
+    # Purpose: Prompts the user for a file name
+    #          or uses the default "todo.json"
+    #          and parses both lists and saves them
+    #          to the JSON file
     #
     #****************************************
     def saveFile()
 
       #Prompt user for file
-      puts "Enter the file name to save to (Press 'Enter' for default): "
+      print "Enter the file name to save to (Press 'Enter' for default): "
       answer = gets.chomp
 
       #fix filename
@@ -194,24 +194,31 @@ module TaskManager
         #Clear previous screen
         system "clear" or system "cls"
 
-        puts "Select one of the following:\n",
-             "----------ACTIONS-----------",
+        print "Select one of the following:\n",
+             "-----------ACTIONS----------\n",
              "1. Add Task\n",
              "2. Complete/Remove Task\n",
              "3. Display All Tasks\n",
              "4. Display Completed Tasks\n",
-             "----------FILE I/O----------",
+             "----------FILE I/O----------\n",
              "5. Open list from file\n",
              "6. Save list to file\n",
-             "----------------------------",
-             "7. Exit Program"
+             "------------Exit------------\n",
+             "7. Exit Program\n",
+             "----------------------------\n",
+             ">> "
 
         num = gets
 
         if (num == "1\n")
+          #Clear previous screen
+          system "clear" or system "cls"
+
           addTask()
         elsif (num == "2\n")
-          puts "Enter the ID of the task you wish to delete: "
+          #Clear previous screen
+          system "clear" or system "cls"
+          print "Enter the ID of the task you wish to delete: "
           taskID = gets.chomp
           taskID.to_i
           removeTask(taskID)
@@ -220,43 +227,49 @@ module TaskManager
         elsif (num == "4\n")
           displayTasks(@completedList)
         elsif (num == "5\n")
-          openFile
+          #Clear previous screen
+          system "clear" or system "cls"
+          openFile()
         elsif (num == "6\n")
-          saveFile
-        end
+          #Clear previous screen
+          system "clear" or system "cls"
+          saveFile()
+        end #end if-elseif
 
       end
 
     end
 
     def addTask()
-      puts "Enter the task name (10 characters max): "
+      print "Enter the task name (10 characters max): "
       taskName = gets.chomp
       while (taskName.length > 10)
-        puts "Error: Task name cannot exceed 11 characters, re-enter: "
+        print "Error: Task name cannot exceed 10 characters, re-enter: "
         taskName = gets.chomp
       end
 
-      puts "Enter the priority level (1-10): "
+      print "Enter the priority level (1-10): "
       taskPriority = gets.chomp
       taskPriority = taskPriority.to_i
       while (taskPriority < 1 || taskPriority > 10)
-        puts "Error: The task priority level must be between 1 and 10, re-enter: "
+        print "Error: The task priority level must be between 1 and 10,",
+        " re-enter: "
         taskPriority = gets.chomp
         taskPriority = taskPriority.to_i
       end
 
-      puts "Enter the due date in the format of mm/dd/yyyy: "
+      print "Enter the due date in the format of mm/dd/yyyy: "
       taskDueDate = gets.chomp
       while (taskDueDate.length > 10)
-        puts "Error: Task due date cannot exceed 10 characters make sure it's in the proper format, re-enter: "
+        print "Error: Task due date cannot exceed 10 characters make sure it's",
+        "in the proper format, re-enter: "
         taskDueDate = gets.chomp
       end
 
-      puts "Enter the description: "
+      print "Enter the description: "
       taskDesc = gets.chomp
       while (taskDesc.length > 40)
-        puts "Error: Task name cannot exceed 40 characters, re-enter: "
+        print "Error: Task name cannot exceed 40 characters, re-enter: "
         taskDesc = gets.chomp
       end
 
@@ -268,7 +281,7 @@ module TaskManager
     end
 
     #***************************************
-    # Class: displayTasks
+    # Method: displayTasks
     #
     # Purpose: A system independant function
     #          used to display a formated
@@ -348,4 +361,4 @@ module TaskManager
     end
 
   end
-end
+end #end module
