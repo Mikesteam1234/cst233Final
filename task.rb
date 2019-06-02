@@ -88,22 +88,27 @@ module TaskManager
     def openFile()
       #Prompt user for file
       puts "Enter the file name to open from (Press 'Enter' for default): "
-      answer = gets()
+      answer = gets.chomp
 
-      if (answer == "\n")
+      #fix filename
+      if (answer == "")
         answer = DEFAULT_FILE
-      elsif (!answer.end_with?(".json", ".JSON"))
+      elsif (!answer.include?(".json"))
         answer.concat(".json")
       end
 
       #Get the file as a string
-      jFile = File.read(answer)
-      if jFile
-        data = JSON.parse(jFile)
-        @taskList = data['Lists']['TaskList'].map { |task| Task.new(task['name'], task['priority'], task['dueDate'], task['description'], task['id']) }
-        @completedList = data['Lists']['CompletedList'].map { |task| Task.new(task['name'], task['priority'], task['dueDate'], task['description'], task['id']) }
-      else
-        puts "Could not open file..."
+      begin
+        jFile = File.read(answer)
+        if jFile
+          data = JSON.parse(jFile)
+          @taskList = data['Lists']['TaskList'].map { |task| Task.new(task['name'], task['priority'], task['dueDate'], task['description'], task['id']) }
+          @completedList = data['Lists']['CompletedList'].map { |task| Task.new(task['name'], task['priority'], task['dueDate'], task['description'], task['id']) }
+        else
+          raise
+        end
+      rescue
+        puts "Could not open file '" + answer + "'..."
       end
 
     end
@@ -119,45 +124,50 @@ module TaskManager
     ****************************************'
     def saveFile()
       #Prompt user for file
-      puts "Enter the file name to open from (Press 'Enter' for default): "
-      answer = gets
+      puts "Enter the file name to save to (Press 'Enter' for default): "
+      answer = gets.chomp
 
-      if (answer == "\n")
+      #fix filename
+      if (answer == "")
         answer = DEFAULT_FILE
-      elsif (!answer.end_with?(".json", ".JSON"))
+      elsif (!answer.include?(".json"))
         answer.concat(".json")
       end
 
       #Input is valid, try to open file for writing
-      jFile = File.new(answer, "w") #'w' will clear file before writing
-      if jFile
-        # TASK LIST
-        # This hashes the array into a map which is compatible with JSON's generate
-        taskList_hash = @taskList.map { |task| {
-            name: task.getName, priority: task.getPriority, dueDate: task.getDue, description: task.getDescription, id: task.getId
-        }}
-        taskList_json = JSON.pretty_generate(taskList_hash)
+      begin
+        jFile = File.new(answer, "w") #'w' will clear file before writing
+        if jFile
+          # TASK LIST
+          # This hashes the array into a map which is compatible with JSON's generate
+          taskList_hash = @taskList.map { |task| {
+              name: task.getName, priority: task.getPriority, dueDate: task.getDue, description: task.getDescription, id: task.getId
+          }}
+          taskList_json = JSON.pretty_generate(taskList_hash)
 
-        jFile << "{ \"Lists\": \n"
-        jFile << "{ \"TaskList\": \n"
-        jFile << taskList_json
-        jFile << ",\n"
+          jFile << "{ \"Lists\": \n"
+          jFile << "{ \"TaskList\": \n"
+          jFile << taskList_json
+          jFile << ",\n"
 
-        #COMPLETED LIST
-        completedList_hash = @completedList.map { |task| {
-            name: task.getName, priority: task.getPriority, dueDate: task.getDue, description: task.getDescription, id: task.getId
-        }}
-        completedList_json = JSON.pretty_generate(completedList_hash)
+          #COMPLETED LIST
+          completedList_hash = @completedList.map { |task| {
+              name: task.getName, priority: task.getPriority, dueDate: task.getDue, description: task.getDescription, id: task.getId
+          }}
+          completedList_json = JSON.pretty_generate(completedList_hash)
 
-        jFile << "\"CompletedList\": \n"
-        jFile << completedList_json
-        jFile << "\n"
-        jFile << "}\n"
-        jFile << "}"
+          jFile << "\"CompletedList\": \n"
+          jFile << completedList_json
+          jFile << "\n"
+          jFile << "}\n"
+          jFile << "}"
 
-        jFile.close()
-      else
-        puts "Could not open file..."
+          jFile.close()
+        else
+          raise
+        end
+      rescue
+        puts "Could not open file '" + answer + "'..."
       end
 
     end
