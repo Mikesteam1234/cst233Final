@@ -1,6 +1,8 @@
 ## TaskManager Module written by: Michael Remley, Levi Leuthold, Dillon Wall
 ## For use in the CST223 Final Project
 
+require "json"
+
 module TaskManager
 
   '***************************************
@@ -8,6 +10,9 @@ module TaskManager
   ***************************************'
   #Formatting
   TOTAL_LENGTH_OF_WINDOW = 76
+
+  #File I/O
+  DEFAULT_FILE = "todo.json"
 
   '***************************************
   Class:    Task
@@ -71,21 +76,108 @@ module TaskManager
       @taskCount = 0
     end
 
-    #start the program
-    def fileMenu
+    '***************************************
+    Method: openFile
+
+    Purpose: Prompts the user for a file name
+             or uses the default "todo.json"
+             and parses and creates both lists
+             from the JSON file
+
+    ****************************************'
+    def openFile()
+      #Prompt user for file
+      puts "Enter the file name to open from (Press 'Enter' for default): "
+      answer = gets()
+
+      if (answer == "\n")
+        answer = DEFAULT_FILE
+      elsif (!answer.end_with?(".json", ".JSON"))
+        answer.concat(".json")
+      end
+
+      #Get the file as a string
+      jFile = File.read(answer)
+      if jFile
+        data = JSON.parse(jFile)
+        @taskList = data['Lists']['TaskList'].map { |task| Task.new(task['name'], task['priority'], task['dueDate'], task['description'], task['id']) }
+        @completedList = data['Lists']['CompletedList'].map { |task| Task.new(task['name'], task['priority'], task['dueDate'], task['description'], task['id']) }
+      else
+        puts "Could not open file..."
+      end
 
     end
 
+    '***************************************
+    Class: displayTasks
+
+    Purpose: Prompts the user for a file name
+             or uses the default "todo.json"
+             and parses both lists and saves them
+             to the JSON file
+
+    ****************************************'
+    def saveFile()
+      #Prompt user for file
+      puts "Enter the file name to open from (Press 'Enter' for default): "
+      answer = gets
+
+      if (answer == "\n")
+        answer = DEFAULT_FILE
+      elsif (!answer.end_with?(".json", ".JSON"))
+        answer.concat(".json")
+      end
+
+      #Input is valid, try to open file for writing
+      jFile = File.new(answer, "w") #'w' will clear file before writing
+      if jFile
+        # TASK LIST
+        # This hashes the array into a map which is compatible with JSON's generate
+        taskList_hash = @taskList.map { |task| {
+            name: task.getName, priority: task.getPriority, dueDate: task.getDue, description: task.getDescription, id: task.getId
+        }}
+        taskList_json = JSON.pretty_generate(taskList_hash)
+
+        jFile << "{ \"Lists\": \n"
+        jFile << "{ \"TaskList\": \n"
+        jFile << taskList_json
+        jFile << ",\n"
+
+        #COMPLETED LIST
+        completedList_hash = @completedList.map { |task| {
+            name: task.getName, priority: task.getPriority, dueDate: task.getDue, description: task.getDescription, id: task.getId
+        }}
+        completedList_json = JSON.pretty_generate(completedList_hash)
+
+        jFile << "\"CompletedList\": \n"
+        jFile << completedList_json
+        jFile << "\n"
+        jFile << "}\n"
+        jFile << "}"
+
+        jFile.close()
+      else
+        puts "Could not open file..."
+      end
+
+    end
+
+    #start the program
     def mainMenu
       num = 1
 
-      while (num != "5\n")
+      while (num != "7\n")
         puts "Select one of the following:\n",
+             "----------ACTIONS-----------",
              "1. Add Task\n",
              "2. Complete/Remove Task\n",
              "3. Display All Tasks\n",
              "4. Display Completed Tasks\n",
-             "5. Exit Program"
+             "----------FILE I/O----------",
+             "5. Open list from file\n",
+             "6. Save list to file\n",
+             "----------------------------",
+             "7. Exit Program"
 
         num = gets
 
@@ -100,6 +192,10 @@ module TaskManager
           displayTasks(@taskList)
         elsif (num == "4\n")
           displayTasks(@completedList)
+        elsif (num == "5\n")
+          openFile
+        elsif (num == "6\n")
+          saveFile
         end
 
       end
