@@ -230,18 +230,35 @@ module TaskManager
     end
 
     def addTask()
-      puts "Enter the task name: "
+      puts "Enter the task name (10 characters max): "
       taskName = gets.chomp
+      while (taskName.length > 10)
+        puts "Error: Task name cannot exceed 11 characters, re-enter: "
+        taskName = gets.chomp
+      end
 
       puts "Enter the priority level (1-10): "
       taskPriority = gets.chomp
-      taskPriority.to_i
+      taskPriority = taskPriority.to_i
+      while (taskPriority < 1 || taskPriority > 10)
+        puts "Error: The task priority level must be between 1 and 10, re-enter: "
+        taskPriority = gets.chomp
+        taskPriority = taskPriority.to_i
+      end
 
-      puts "Enter the due date: "
+      puts "Enter the due date in the format of mm/dd/yyyy: "
       taskDueDate = gets.chomp
+      while (taskDueDate.length > 10)
+        puts "Error: Task due date cannot exceed 10 characters make sure it's in the proper format, re-enter: "
+        taskDueDate = gets.chomp
+      end
 
       puts "Enter the description: "
       taskDesc = gets.chomp
+      while (taskDesc.length > 40)
+        puts "Error: Task name cannot exceed 40 characters, re-enter: "
+        taskDesc = gets.chomp
+      end
 
       newTask = Task.new(taskName, taskPriority, taskDueDate,
         taskDesc, @taskCount)
