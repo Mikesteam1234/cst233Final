@@ -188,10 +188,11 @@ module TaskManager
     def mainMenu
       num = 1
 
-      #Clear previous screen
-      system "clear" or system "cls"
-
       while (num != "7\n")
+
+        #Clear previous screen
+        system "clear" or system "cls"
+
         puts "Select one of the following:\n",
              "----------ACTIONS-----------",
              "1. Add Task\n",
@@ -263,7 +264,9 @@ module TaskManager
       #display error message and clear
       #screen on empty tasklist
       if taskArray.length() <= 0
-        puts "No tasks to retrieve...\n\n"
+        puts "No tasks to retrieve..."
+        print "\nPress enter to continue... "
+        gets
         return
       end
 
