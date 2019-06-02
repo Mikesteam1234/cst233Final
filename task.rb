@@ -5,22 +5,23 @@ require "json"
 
 module TaskManager
 
-  '***************************************
-             Program constants
-  ***************************************'
+  #***************************************
+  #           Program constants
+  #***************************************
+
   #Formatting
   TOTAL_LENGTH_OF_WINDOW = 76
 
   #File I/O
   DEFAULT_FILE = "todo.json"
 
-  '***************************************
-  Class:    Task
-
-  Purpose:  The class that defines the
-  data members and functionality of a task
-  for use in the program.
-  ***************************************'
+  #***************************************
+  #Class:    Task
+  #
+  #Purpose:  The class that defines the
+  #data members and functionality of a task
+  #for use in the program.
+  #***************************************
   class Task
     #task constructor
     def initialize(name, priority, dueDate, description, id)
@@ -57,17 +58,17 @@ module TaskManager
     def getId
       @id
     end
-    ####################
+
   end #End TaskInterface
 
-  '***************************************
-  Class:    Controller
-
-  Purpose:  Controls the program features such
-  as the menu, displaying, storing data, etc.
-
+  #***************************************
+  #Class:    Controller
+  #
+  #Purpose:  Controls the program features such
+  #as the menu, displaying, storing data, etc.
+  #
   # TODO:
-  ****************************************'
+  #****************************************
   class Controller
     #class constructor
     def initialize
@@ -76,15 +77,14 @@ module TaskManager
       @taskCount = 0
     end
 
-    '***************************************
-    Method: openFile
-
-    Purpose: Prompts the user for a file name
-             or uses the default "todo.json"
-             and parses and creates both lists
-             from the JSON file
-
-    ****************************************'
+    #***************************************
+    # Method: openFile
+    #
+    # Purpose: Prompts the user for a file name
+    #          or uses the default "todo.json"
+    #          and parses and creates both lists
+    #          from the JSON file
+    #****************************************
     def openFile()
       #Prompt user for file
       puts "Enter the file name to open from (Press 'Enter' for default): "
@@ -102,27 +102,35 @@ module TaskManager
         jFile = File.read(answer)
         if jFile
           data = JSON.parse(jFile)
-          @taskList = data['Lists']['TaskList'].map { |task| Task.new(task['name'], task['priority'], task['dueDate'], task['description'], task['id']) }
-          @completedList = data['Lists']['CompletedList'].map { |task| Task.new(task['name'], task['priority'], task['dueDate'], task['description'], task['id']) }
+          @taskList = data['Lists']['TaskList'].map { |task|
+            Task.new(task['name'], task['priority'], task['dueDate'],
+              task['description'], task['id']) }
+
+          @completedList = data['Lists']['CompletedList'].map { |task|
+            Task.new(task['name'], task['priority'], task['dueDate'],
+              task['description'], task['id']) }
         else
+          #raise what?
           raise
-        end
+        end #end if
+
       rescue
         puts "Could not open file '" + answer + "'..."
       end
 
-    end
+    end #end open file
 
-    '***************************************
-    Class: displayTasks
-
-    Purpose: Prompts the user for a file name
-             or uses the default "todo.json"
-             and parses both lists and saves them
-             to the JSON file
-
-    ****************************************'
+    #***************************************
+    #Class: displayTasks
+    #
+    #Purpose: Prompts the user for a file name
+    #         or uses the default "todo.json"
+    #         and parses both lists and saves them
+    #         to the JSON file
+    #
+    #****************************************
     def saveFile()
+
       #Prompt user for file
       puts "Enter the file name to save to (Press 'Enter' for default): "
       answer = gets.chomp
@@ -139,9 +147,12 @@ module TaskManager
         jFile = File.new(answer, "w") #'w' will clear file before writing
         if jFile
           # TASK LIST
-          # This hashes the array into a map which is compatible with JSON's generate
+          # This hashes the array into a map which is compatible
+          # with JSON's generate
           taskList_hash = @taskList.map { |task| {
-              name: task.getName, priority: task.getPriority, dueDate: task.getDue, description: task.getDescription, id: task.getId
+              name: task.getName, priority: task.getPriority,
+              dueDate: task.getDue, description:
+              task.getDescription, id: task.getId
           }}
           taskList_json = JSON.pretty_generate(taskList_hash)
 
@@ -152,7 +163,9 @@ module TaskManager
 
           #COMPLETED LIST
           completedList_hash = @completedList.map { |task| {
-              name: task.getName, priority: task.getPriority, dueDate: task.getDue, description: task.getDescription, id: task.getId
+              name: task.getName, priority: task.getPriority,
+              dueDate: task.getDue, description: task.getDescription,
+              id: task.getId
           }}
           completedList_json = JSON.pretty_generate(completedList_hash)
 
@@ -169,7 +182,6 @@ module TaskManager
       rescue
         puts "Could not open file '" + answer + "'..."
       end
-
     end
 
     #start the program
@@ -231,21 +243,21 @@ module TaskManager
       @taskCount = @taskCount + 1
     end
 
-    '***************************************
-    Class: displayTasks
-
-    Purpose: A system independant function
-             used to display a formated
-             list of all incomplete tasks
-
+    #***************************************
+    # Class: displayTasks
+    #
+    # Purpose: A system independant function
+    #          used to display a formated
+    #          list of all incomplete tasks
+    #
     # TODO: Finish formatting
-    ****************************************'
+    #*****************************************
     def displayTasks(taskArray)
 
       #Clear previous screen
       system "clear" or system "cls"
 
-      #display 'error message' and clear
+      #display error message and clear
       #screen on empty tasklist
       if taskArray.length() <= 0
         puts "No tasks to retrieve...\n\n"
@@ -283,7 +295,9 @@ module TaskManager
       found = false
       for task in @taskList do
 
-        if task.getId().to_s == taskId.to_s   #For some reason comparing integers doesn't work here, it only worked when I converted both to strings
+        #For some reason comparing integers doesn't work here,
+        #it only worked when I converted both to strings
+        if task.getId().to_s == taskId.to_s
           @completedList.push(@taskList.last)
           @taskList.delete_at(index)
           found = true
