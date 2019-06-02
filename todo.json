@@ -2,17 +2,17 @@
 { "TaskList": 
 [
   {
-    "name": "Ham",
+    "name": "Ruby Final",
     "priority": "10",
-    "dueDate": "99-99-9999",
-    "description": "hasidjsjsidjd jds",
+    "dueDate": "05-25-1995",
+    "description": "Our Final Project",
     "id": 0
   },
   {
-    "name": "Hello",
-    "priority": "9",
-    "dueDate": "99-89-1999",
-    "description": "ienjsd jsd n",
+    "name": "Feature",
+    "priority": "5",
+    "dueDate": "12-12-1999",
+    "description": "A non-descript feature",
     "id": 1
   }
 ],

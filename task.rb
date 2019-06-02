@@ -189,6 +189,10 @@ module TaskManager
       num = 1
 
       while (num != "7\n")
+
+        #Clear previous screen
+        system "clear" or system "cls"
+
         puts "Select one of the following:\n",
              "----------ACTIONS-----------",
              "1. Add Task\n",
@@ -277,7 +281,9 @@ module TaskManager
       #display error message and clear
       #screen on empty tasklist
       if taskArray.length() <= 0
-        puts "No tasks to retrieve...\n\n"
+        puts "No tasks to retrieve..."
+        print "\nPress enter to continue... "
+        gets
         return
       end
 
@@ -302,8 +308,15 @@ module TaskManager
               atask.getDue().rjust(11)
       end #End for each task
 
-      #place holder
+      #Fancy formatting
       puts
+
+      1.upto TOTAL_LENGTH_OF_WINDOW do
+        print "-"
+      end
+
+      print "\nPress enter to continue... "
+      gets
 
     end #End displayTasks
 
