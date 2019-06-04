@@ -140,6 +140,9 @@ module TaskManager
         puts "Could not open file '" + answer + "'..."
       end
 
+      #grab new starting point
+      @taskCount = @taskList.length()
+
     end #end open file
 
     #***************************************
