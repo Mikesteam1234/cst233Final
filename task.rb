@@ -59,7 +59,28 @@ module TaskManager
     def getId
       @id
     end
+    #####End Getters#######
+    #####Start Setters#####
+    def setName(n)
+      @name = n
+    end
 
+    def setPriority(p)
+      @priority = p
+    end
+
+    def setDue(due)
+      @dueDate = due
+    end
+
+    def setDescription(desc)
+      @description = desc
+    end
+
+    def setId(i)
+      @id = i
+    end
+    ####End Setters#####
   end #End TaskInterface
 
   #***************************************
@@ -189,7 +210,7 @@ module TaskManager
     def mainMenu
       num = 1
 
-      while (num != "7\n")
+      while (num != "8\n")
 
         #Clear previous screen
         system "clear" or system "cls"
@@ -197,14 +218,15 @@ module TaskManager
         print "Select one of the following:\n",
              "-----------ACTIONS----------\n",
              "1. Add Task\n",
-             "2. Complete/Remove Task\n",
-             "3. Display All Tasks\n",
-             "4. Display Completed Tasks\n",
+             "2. Edit Task\n",
+             "3. Complete/Remove Task\n",
+             "4. Display All Tasks\n",
+             "5. Display Completed Tasks\n",
              "----------FILE I/O----------\n",
-             "5. Open list from file\n",
-             "6. Save list to file\n",
+             "6. Open list from file\n",
+             "7. Save list to file\n",
              "------------Exit------------\n",
-             "7. Exit Program\n",
+             "8. Exit Program\n",
              "----------------------------\n",
              ">> "
 
@@ -213,24 +235,33 @@ module TaskManager
         if (num == "1\n")
           #Clear previous screen
           system "clear" or system "cls"
-
           addTask()
         elsif (num == "2\n")
+          editTask(@taskList)
+        elsif (num == "3\n")
           #Clear previous screen
           system "clear" or system "cls"
           print "Enter the ID of the task you wish to delete: "
           taskID = gets.chomp
           taskID.to_i
           removeTask(taskID)
-        elsif (num == "3\n")
-          displayTasks(@taskList)
         elsif (num == "4\n")
-          displayTasks(@completedList)
+          displayTasks(@taskList)
+
+          print "Press enter to continue..."
+          gets
+
         elsif (num == "5\n")
+          displayTasks(@completedList)
+
+          print "Press enter to continue..."
+          gets
+
+        elsif (num == "6\n")
           #Clear previous screen
           system "clear" or system "cls"
           openFile()
-        elsif (num == "6\n")
+        elsif (num == "7\n")
           #Clear previous screen
           system "clear" or system "cls"
           saveFile()
@@ -281,15 +312,18 @@ module TaskManager
     end
 
     #***************************************
-    # Method: displayTasks
+    # Method: editTask(taskArray)
     #
-    # Purpose: A system independant function
-    #          used to display a formated
-    #          list of all incomplete tasks
+    # Purpose: A method in which
+    #          a user can edit any task
+    #          if given the correct id
+    #          by the user
     #
-    # TODO: Finish formatting
+    # TODO:
     #*****************************************
-    def displayTasks(taskArray)
+    def editTask(taskArray)
+
+      num = 9
 
       #Clear previous screen
       system "clear" or system "cls"
@@ -300,6 +334,120 @@ module TaskManager
         puts "No tasks to retrieve..."
         print "\nPress enter to continue... "
         gets
+        return
+      end
+
+      while (num.to_i > 5)
+
+        displayTasks(taskArray)
+
+        print "Select a task to edit (id): "
+        choice = gets.chomp
+
+        if !choice.to_i.kind_of?(Integer)
+          return
+        end
+
+        #Clear previous screen
+        system "clear" or system "cls"
+
+        print "Select one of the following:\n",
+           "-----------ACTIONS----------\n",
+           "1. Edit name\n",
+           "2. Edit description\n",
+           "3. Edit priority\n",
+           "4. Edit due date\n",
+           "------------Exit------------\n",
+           "5. Exit Program\n",
+           "----------------------------\n",
+           ">> "
+
+        num = gets.chomp
+
+        if !num.to_i.kind_of?(Integer)
+          print "choice was not of type integer...\n",
+          "Press enter to continue..."
+          gets
+          return
+        end
+
+        #Clear previous screen
+        system "clear" or system "cls"
+
+        if num.to_i == 1
+
+            print "Enter the task name (10 characters max): "
+            taskName = gets.chomp
+            while (taskName.length > 10)
+              print "Error: Task name cannot exceed 10 characters, re-enter: "
+              taskName = gets.chomp
+            end
+
+            taskArray[choice.to_i].setName(taskName)
+
+        elsif num.to_i == 2
+
+          print "Enter the description: "
+          taskDesc = gets.chomp
+          while (taskDesc.length > 40)
+            print "Error: Task name cannot exceed 40 characters, re-enter: "
+            taskDesc = gets.chomp
+          end
+
+          taskArray[choice.to_i].setDescription(taskDesc)
+
+        elsif num.to_i == 3
+
+          print "Enter the priority level (1-10): "
+          taskPriority = gets.chomp
+          taskPriority = taskPriority.to_i
+          while (taskPriority < 1 || taskPriority > 10)
+            print "Error: The task priority level must be between 1 and 10,",
+            " re-enter: "
+            taskPriority = gets.chomp
+            taskPriority = taskPriority.to_i
+          end
+
+          taskArray[choice.to_i].setPriority(taskPriority)
+
+        elsif num.to_i == 4
+
+          print "Enter the due date in the format of mm/dd/yyyy: "
+          taskDueDate = gets.chomp
+          while (taskDueDate.length > 10)
+            print "Error: Task due date cannot exceed 10 characters make sure it's",
+            "in the proper format, re-enter: "
+            taskDueDate = gets.chomp
+          end
+
+          taskArray[choice.to_i].setDue(taskDueDate)
+
+        end #end if-elseif
+
+      end #end while
+
+    end #end editTask()
+
+    #***************************************
+    # Method: displayTasks(taskArray)
+    #
+    # Purpose: A system independant function
+    #          used to display a formated
+    #          list of all tasks in a given
+    #          array
+    #
+    # TODO:
+    #*****************************************
+    def displayTasks(taskArray)
+
+      #Clear previous screen
+      system "clear" or system "cls"
+
+      #display error message and clear
+      #screen on empty tasklist
+      if taskArray.length() <= 0
+        puts "No tasks to retrieve..."
+
         return
       end
 
@@ -331,8 +479,7 @@ module TaskManager
         print "-"
       end
 
-      print "\nPress enter to continue... "
-      gets
+      puts
 
     end #End displayTasks
 
